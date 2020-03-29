@@ -1,0 +1,51 @@
+.App
+
+.nav-item
+  margin-right: .5em
+
+.white
+  color: white !important
+
+.w-300px
+  width: 300px !important
+
+.w-max-content
+  width: max-content !important
+
+@import "bootstrap"
+
+.list-group-blank
+  @extend .list-group-flush
+
+.list-group-blank .list-group-item
+  border: 0
+
+.article-title
+  @extend .card-header
+  text-align: left !important
+
+.pub-date
+  font-weight: lighter
+  font-size: smaller
+  margin: 0
+
+.flex-line
+  display: flex
+  flex-direction: row
+
+.flex-line-left
+  @extend .flex-line
+  justify-content: left
+
+.no-border
+  border-width: 0 !important
+
+$sort-bg-color: rgba(211, 211, 211, 0.51)
+.sort-bg
+  border-radius: .25rem
+  background-color: $sort-bg-color
+
+$article-bg-color: #f8f9fa
+.article-bg
+  border-radius: .25rem
+  background-color: $article-bg-color

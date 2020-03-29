@@ -7,11 +7,13 @@ const format = (e, op, type) => {
     return `${f(e)}${op}_${type}`
 }
 
+const provideServerUrl = () => 'http://webp.itprof.sk:8000/fetchurl'
+
 function request(url) {
     return dispatch => {
         dispatch(this.pending())
 
-        return http.get(url)
+        return http.post(provideServerUrl(), {url})
             .then(({data}) => {
                 dispatch(this.done(data))
             })
@@ -25,8 +27,7 @@ function request(url) {
 export function createFetchApi(
     entity,
     operation,
-    init = {data: null},
-    dataToState = data => ({data})
+    init = {data: null}
 ) {
     const op = operation
     const types = {
@@ -51,17 +52,20 @@ export function createFetchApi(
         pending: () => ({
             type: types.FETCH_PENDING
         }),
-        reduce: (state = initState, action) => {
-            const t = types
-            switch (action.type) {
-                case t.FETCH_DONE:
-                    return { ...state, ...dataToState(action.data), pending: false, error: null}
-                case t.FETCH_PENDING:
-                    return { ...state,  pending: true}
-                case t.FETCH_ERROR:
-                    return { ...state,  pending: false, error: action.error}
-                default:
-                    return state
+        reduce(dataToState = data => ({data})) {
+
+            return (state = initState, action,) => {
+                const t = types
+                switch (action.type) {
+                    case t.FETCH_DONE:
+                        return { ...state, ...dataToState(action.data), pending: false, error: null }
+                    case t.FETCH_PENDING:
+                        return { ...state, pending: true }
+                    case t.FETCH_ERROR:
+                        return { ...state, pending: false, error: action.error }
+                    default:
+                        return state
+                }
             }
         }
     }

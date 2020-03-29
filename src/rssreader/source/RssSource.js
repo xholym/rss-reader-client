@@ -1,7 +1,7 @@
 import React from 'react'
 import { Form } from 'react-bootstrap'
 import { connect } from 'react-redux'
-import { rssSource } from '../article/articleState'
+import { rssSource } from '../store/state'
 
 function RssSource({ source, setSource, className }) {
 

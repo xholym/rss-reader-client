@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from 'react-bootstrap'
 import { bindActionCreators } from 'redux'
-import { list as articleList } from '../article/articleState'
+import { list as ArticleList } from '../store/state'
 import { connect } from 'react-redux'
 import { MdGetApp } from 'react-icons/md'
 
@@ -19,7 +19,7 @@ const stateToProps = state => ({
 })
 
 const dispatchToProps = dis =>
-    bindActionCreators({ fetch: articleList.doFetch }, dis)
+    bindActionCreators({ fetch: ArticleList.doFetch }, dis)
 
 export default connect(
     stateToProps,

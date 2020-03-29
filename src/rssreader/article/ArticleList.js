@@ -1,7 +1,7 @@
 import React from 'react'
 import { Accordion, Alert, Button, Card, ListGroup, Spinner } from 'react-bootstrap'
 import { connect } from 'react-redux'
-import { setDetail } from './articleState'
+import { setDetail } from '../store/state'
 import Article from './Article'
 
 function ArticleList({ error, pending, articles, selected, select }) {
@@ -17,15 +17,21 @@ function ArticleList({ error, pending, articles, selected, select }) {
         <div className="list-group-blank">
             {articles && articles.map(a =>
                 <Accordion as={ListGroup.Item} key={a.id}>
-                    <Card>
-                        <Accordion.Toggle className="article-title" as={Button} variant="light" eventKey={a.id}
+                    <Card className="no-border">
+                        <Accordion.Toggle className="article-title square-border no-border" as={Button} variant="light"
+                                          eventKey={a.id}
                                           onClick={() => select(a)}>
                             {a.title}
                         </Accordion.Toggle>
                         <Accordion.Collapse eventKey={a.id}>
-                        <span>
-                            {a === selected && <Card.Body> <Article data={a}/> </Card.Body>}
-                        </span>
+                            <div>
+                                {
+                                    a === selected
+                                    && <Card.Body className="article-bg">
+                                        <Article {...a}/>
+                                    </Card.Body>
+                                }
+                            </div>
                         </Accordion.Collapse>
                     </Card>
                 </Accordion>
