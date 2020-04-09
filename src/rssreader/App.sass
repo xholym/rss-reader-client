@@ -1,4 +1,3 @@
-.App
 
 .nav-item
   margin-right: .5em
@@ -12,7 +11,7 @@
 .w-max-content
   width: max-content !important
 
-@import "bootstrap"
+@import "~bootstrap/scss/bootstrap.scss"
 
 .list-group-blank
   @extend .list-group-flush
@@ -49,3 +48,7 @@ $article-bg-color: #f8f9fa
 .article-bg
   border-radius: .25rem
   background-color: $article-bg-color
+
+img
+  // here so if description contains img, img has at least some margin
+  margin: 0.25rem 0.25rem 0.25rem 0.25rem

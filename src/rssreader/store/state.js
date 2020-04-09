@@ -1,6 +1,7 @@
 import createFetchApi from './fetch'
-import { runReducers } from '../utils/utils'
+import { runReducers, safeGet, xmlEncodedToStr } from '../utils/utils'
 import createSortApi, { doSortBy } from './sort'
+import { xml2js } from 'xml-js'
 
 export const list = createFetchApi('article', 'list', { list: null })
 export const sort = createSortApi('article', 'list')
@@ -19,28 +20,25 @@ export const setDetail = detail => ({
     detail
 })
 
-const rssToArticles = rss => {
-    const domParser = new DOMParser()
-    const doc = domParser.parseFromString(rss, 'text/xml')
-    const items = []
-    doc.querySelectorAll('item').forEach(it => {
-        let enclosure = it.querySelector('enclosure')
-        enclosure = {
-            url: enclosure.getAttribute('url'),
-            length: enclosure.getAttribute('length'),
-            type: enclosure.getAttribute('type'),
-        }
-
-        items.push({
-            id: it.querySelector('guid').innerHTML,
-            title: it.querySelector('title').innerHTML,
-            description: it.querySelector('description').innerHTML,
-            pubDate: new Date(it.querySelector(('pubDate')).innerHTML),
-            enclosure,
-            link: it.querySelector(('link')).innerHTML
+const rssToArticles = data => {
+    const {rss} = xml2js(data, {compact: true, textFn: val => xmlEncodedToStr(val)})
+    return rss.channel.item
+        .map(it => {
+            let enclosure = safeGet(it.enclosure, '_attributes')
+            enclosure = enclosure && {
+                url: enclosure.url,
+                length: enclosure.length,
+                type: enclosure.type,
+            }
+            return {
+                id: safeGet(it.guid, '_text', '_cdata'),
+                title: safeGet(it.title, '_text', '_cdata') ,
+                description: safeGet(it.description, '_text', '_cdata'),
+                pubDate: new Date(safeGet(it.pubDate, '_text', '_cdata')),
+                enclosure,
+                link: safeGet(it.link, 0)
+            }
         })
-    })
-    return items
 }
 
 const reduceOther = (state, action) => {

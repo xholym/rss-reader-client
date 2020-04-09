@@ -3,10 +3,10 @@ import { Button } from 'react-bootstrap'
 
 const Img = ({ from }) => {
     if (!from || !from.type.includes('image'))
-        return
+        return <div/>
 
     return (
-        <div className="text-center mb-3">
+        <div className='text-center mb-3'>
             <img src={from.url} alt={`${from.title}`}/>
         </div>
     )
@@ -23,14 +23,13 @@ function Article({ description, link, pubDate, enclosure }) {
     return (
         <div>
             <Img from={enclosure}/>
-            <p>
-                {description}
+            <p dangerouslySetInnerHTML={{ __html: description }}>
             </p>
-            <Button variant="dark" target="_blank" href={link}>
+            <Button variant='dark' target='_blank' href={link}>
                 Full Article
             </Button>
-            <hr className="mb-0"/>
-            <p className="pub-date">
+            <hr className='mb-0'/>
+            <p className='pub-date'>
                 {formatDate(pubDate)}
             </p>
         </div>

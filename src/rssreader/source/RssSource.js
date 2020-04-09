@@ -6,7 +6,7 @@ import { rssSource } from '../store/state'
 function RssSource({ source, setSource, className }) {
 
     return (
-        <Form.Control placeholder="RSS Source URL"
+        <Form.Control placeholder='RSS Source URL'
                       defaultValue={source}
                       className={className}
                       onChange={e => {

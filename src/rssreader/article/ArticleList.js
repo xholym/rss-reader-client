@@ -11,14 +11,14 @@ function ArticleList({ error, pending, articles, selected, select }) {
             Could not load Articles from Source
         </Alert>
     if (pending)
-        return <Spinner animation="border"/>
+        return <Spinner animation='border'/>
 
     return (
-        <div className="list-group-blank">
-            {articles && articles.map(a =>
-                <Accordion as={ListGroup.Item} key={a.id}>
-                    <Card className="no-border">
-                        <Accordion.Toggle className="article-title square-border no-border" as={Button} variant="light"
+        <ListGroup variant='blank'>
+            {articles && articles.map((a, i) =>
+                <Accordion as={ListGroup.Item} key={i}>
+                    <Card className='no-border'>
+                        <Accordion.Toggle className='article-title square-border no-border' as={Button} variant='light'
                                           eventKey={a.id}
                                           onClick={() => select(a)}>
                             {a.title}
@@ -27,7 +27,7 @@ function ArticleList({ error, pending, articles, selected, select }) {
                             <div>
                                 {
                                     a === selected
-                                    && <Card.Body className="article-bg">
+                                    && <Card.Body className='article-bg'>
                                         <Article {...a}/>
                                     </Card.Body>
                                 }
@@ -36,7 +36,7 @@ function ArticleList({ error, pending, articles, selected, select }) {
                     </Card>
                 </Accordion>
             )}
-        </div>
+        </ListGroup>
     )
 }
 

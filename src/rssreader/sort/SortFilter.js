@@ -27,10 +27,10 @@ function SortFilter({ doSortBy, className }) {
 
     return (
         <FormGroup className={className}>
-            <Form.Label className="mr-3 mt-auto mb-auto">
+            <Form.Label className='mr-3 mt-auto mb-auto'>
                 Sort By:
             </Form.Label>
-            <Form.Control className="w-max-content mr-3" as="select" defaultValue={orderVal}
+            <Form.Control className='w-max-content mr-3' as='select' defaultValue={orderVal}
                           onChange={e => {
                               if (!e.target)
                                   return
@@ -45,7 +45,7 @@ function SortFilter({ doSortBy, className }) {
                     )
                 }
             </Form.Control>
-            <Button className="mr-3" variant="dark"
+            <Button className='mr-3' variant='dark'
                     onClick={() => {
                         doSortBy(getOrder())
                     }}>

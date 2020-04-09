@@ -8,7 +8,7 @@ import { MdGetApp } from 'react-icons/md'
 function FetchBtn({ source, fetch }) {
 
     return (
-        <Button variant="dark" onClick={() => fetch(source)}>
+        <Button variant='dark' onClick={() => fetch(source)}>
             <MdGetApp/> Load
         </Button>
     )
