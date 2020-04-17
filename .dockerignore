@@ -1,0 +1,11 @@
+.circleci
+.idea
+/node_modules
+/public
+/src
+.git
+.gitignore
+Dockerfile
+*.md
+*.yml
+*.json
