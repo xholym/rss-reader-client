@@ -22,7 +22,7 @@ jobs:
           command: npm test
   deploy:
     docker:
-      - image: koalaman/shellcheck-alpine:stable
+      - image: circleci/node:13.13.0-slim
         environment:
           HEROKU_APP: "xholym--rss-reader"
           HEROKU_PROCESS: "web"
@@ -40,7 +40,8 @@ jobs:
             IMAGE_NAME=$(${DOCKER_REGISTRY}/${HEROKU_APP}/${HEROKU_PROCESS})
       - run:
           name: Docker login
-          command: echo ${HEROKU_KEY} | docker login -u _json_key --password-stdin https://${DOCKER_REGISTRY}
+          command: |
+            echo ${HEROKU_KEY} | docker login -u _json_key --password-stdin https://${DOCKER_REGISTRY}
       - run:
           name: Build docker image
           comand: docker build -t $IMAGE_NAME:$VERSION .
