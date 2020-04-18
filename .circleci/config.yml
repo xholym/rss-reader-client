@@ -28,8 +28,8 @@ jobs:
           HEROKU_PROCESS: "web"
           DOCKER_REGISTRY: "registry.heroku.com"
     steps:
-      - checkout
       - setup_remote_docker
+      - checkout
       - run:
           name: Setup Heroku
           command: bash .circleci/setup-heroku.sh # run a script to set up Heroku
@@ -60,11 +60,11 @@ workflows:
   all:
     jobs:
       - build
-      - deploy:
+      -  deploy:
           requires:
             - build
-          filters:
-            branches:
-              only:
-                - master
-                - ci-cd   # TODO remove after test
+#          filters:
+#            branches:
+#              only:
+#                - master
+#                - ci-cd   # TODO remove after test
