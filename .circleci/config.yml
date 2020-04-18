@@ -38,11 +38,10 @@ jobs:
       - run:
           name: Setup variables
           command: |
-            grep \"version\": package.json | sed -n 's/.*: "\(.*\)",.*/\1/p'
-            echo ci=${CIRCLE_BUILD_NUM}
-            echo d=${DOCKER_REGISTRY},${HEROKU_APP_NAME},${HEROKU_PROCESS}
             VERSION=$(grep \"version\": package.json | sed -n 's/.*: "\(.*\)",.*/\1/p')-${CIRCLE_BUILD_NUM}
             IMAGE_NAME=${DOCKER_REGISTRY}/${HEROKU_APP_NAME}/${HEROKU_PROCESS}
+            echo "export VERSION=${VERSION}" >> $BASH_ENV
+            echo "export IMAGE_NAME=${IMAGE_NAME}" >> $BASH_ENV
       - run:
           name: Docker login
           command: echo ${HEROKU_API_KEY} | docker login -u _json_key --password-stdin https://${DOCKER_REGISTRY}
