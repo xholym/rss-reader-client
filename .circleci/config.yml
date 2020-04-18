@@ -59,10 +59,10 @@ workflows:
     jobs:
       - build
       - deploy
-        requires:
-          - build
-        filters:
-          branches:
-            only:
-              - master
-              - ci-cd   # TODO remove after test
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - master
+                - ci-cd   # TODO remove after test
