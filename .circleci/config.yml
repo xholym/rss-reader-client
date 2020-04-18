@@ -58,7 +58,7 @@ workflows:
   all:
     jobs:
       - build
-      - deploy
+      - deploy:
           requires:
             - build
           filters:
