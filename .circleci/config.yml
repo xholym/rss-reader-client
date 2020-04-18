@@ -32,7 +32,7 @@ jobs:
       - checkout
       - run:
           name: Setup Heroku
-          command: bash .circleci/setup-heroku.sh # run a script to set up Heroku
+          command: heroku login
       - run:
           name: Setup vars
           command: |
