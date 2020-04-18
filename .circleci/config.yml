@@ -39,24 +39,24 @@ jobs:
           name: Setup vars
           command: |
             VERSION=$(grep \"version\": package.json | sed -n 's/.*: "\(.*\)",.*/\1/p')
-            IMAGE_NAME=${DOCKER_REGISTRY}/${HEROKU_APP_NAME}/${HEROKU_PROCESS}
+            IMAGE_NAME=$DOCKER_REGISTRY/$HEROKU_APP_NAME/$HEROKU_PROCESS
       - run:
           name: Docker login
           command: |
-            echo ${HEROKU_API_KEY} | docker login -u _json_key --password-stdin https://${DOCKER_REGISTRY}
+            echo $HEROKU_API_KEY | docker login -u _json_key --password-stdin https://$DOCKER_REGISTRY
       - run:
           name: Build image
-          comand: |
-            docker build -t ${IMAGE_NAME}:${VERSION} .
-#      - run:
-#          name: Tag image lastest
-#          comand: docker tag $IMAGE_NAME:$VERSION $IMAGE_NAME:latest
-#      - run:
-#          name: Push image
-#          comand: docker push $IMAGE_NAME
-#      - run:
-#          name: Release heroku container
-#          comand: heroku container:release
+          command: |
+            docker build -t $IMAGE_NAME:$VERSION .
+      - run:
+          name: Tag image lastest
+          command: docker tag $IMAGE_NAME:$VERSION $IMAGE_NAME:latest
+      - run:
+          name: Push image
+          command: docker push $IMAGE_NAME
+      - run:
+          name: Release heroku container
+          command: heroku container:release
 
 
 workflows:
