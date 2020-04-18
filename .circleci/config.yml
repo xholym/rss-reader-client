@@ -23,10 +23,10 @@ jobs:
   deploy:
     docker:
       - image: circleci/node:13.13.0-slim
-    environment:
-      HEROKU_APP: "xholym--rss-reader"
-      HEROKU_PROCESS: "web"
-      DOCKER_REGISTRY: "registry.heroku.com"
+        environment:
+          HEROKU_APP: "xholym--rss-reader"
+          HEROKU_PROCESS: "web"
+          DOCKER_REGISTRY: "registry.heroku.com"
     steps:
       - checkout
       - setup_remote_docker
