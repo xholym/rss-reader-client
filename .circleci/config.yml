@@ -39,7 +39,7 @@ jobs:
           name: Setup vars
           command: |
             VERSION=$(grep \"version\": package.json | sed -n 's/.*: "\(.*\)",.*/\1/p')
-            IMAGE_NAME="$(${DOCKER_REGISTRY}/${HEROKU_APP_NAME}/${HEROKU_PROCESS})"
+            IMAGE_NAME=${DOCKER_REGISTRY}/${HEROKU_APP_NAME}/${HEROKU_PROCESS}
       - run:
           name: Docker login
           command: |
