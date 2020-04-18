@@ -1,4 +1,8 @@
 version: 2.1
+
+orbs:
+  heroku: circleci/heroku@1.0.1
+
 jobs:
   build:
     docker:
@@ -24,12 +28,13 @@ jobs:
     docker:
       - image: circleci/node:13.3.0-stretch
         environment:
-          HEROKU_APP: xholym--rss-reader
+          HEROKU_APP_NAME: xholym--rss-reader
           HEROKU_PROCESS: web
           DOCKER_REGISTRY: registry.heroku.com
     steps:
       - setup_remote_docker
       - checkout
+      - heroku/install
       - run:
           name: Setup Heroku
           command: heroku login
@@ -37,23 +42,23 @@ jobs:
           name: Setup vars
           command: |
             VERSION=$(grep \"version\": package.json | sed -n 's/.*: "\(.*\)",.*/\1/p')
-            IMAGE_NAME=$(${DOCKER_REGISTRY}/${HEROKU_APP}/${HEROKU_PROCESS})
-#      - run:
-#          name: Docker login
-#          command: |
-#            echo ${HEROKU_KEY} | docker login -u _json_key --password-stdin https://${DOCKER_REGISTRY}
-#      - run:
-#          name: Build docker image
-#          comand: docker build -t $IMAGE_NAME:$VERSION .
-#      - run:
-#          name: Tag image lastest
-#          comand: docker tag $IMAGE_NAME:$VERSION $IMAGE_NAME:latest
-#      - run:
-#          name: Push image
-#          comand: docker push $IMAGE_NAME
-#      - run:
-#          name: Release heroku container
-#          comand: heroku container:release
+            IMAGE_NAME=$(${DOCKER_REGISTRY}/${HEROKU_APP_NAME}/${HEROKU_PROCESS})
+      - run:
+          name: Docker login
+          command: |
+            echo ${HEROKU_API_KEY} | docker login -u _json_key --password-stdin https://${DOCKER_REGISTRY}
+      - run:
+          name: Build docker image
+          comand: docker build -t $IMAGE_NAME:$VERSION .
+      - run:
+          name: Tag image lastest
+          comand: docker tag $IMAGE_NAME:$VERSION $IMAGE_NAME:latest
+      - run:
+          name: Push image
+          comand: docker push $IMAGE_NAME
+      - run:
+          name: Release heroku container
+          comand: heroku container:release
 
 
 workflows:
@@ -61,7 +66,7 @@ workflows:
   all:
     jobs:
       - build
-      -  deploy:
+      - deploy:
           requires:
             - build
           context: heroku
