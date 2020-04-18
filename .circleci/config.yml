@@ -38,12 +38,14 @@ jobs:
       - run:
           name: Setup vars
           command: |
-            VERSION=$(grep \"version\": package.json | sed -n 's/.*: "\(.*\)",.*/\1/p')
+            VERSION=$(grep \"version\": package.json | sed -n 's/.*: "\(.*\)",.*/\1/p')-$CIRCLE_BUILD_NUM
             IMAGE_NAME=$DOCKER_REGISTRY/$HEROKU_APP_NAME/$HEROKU_PROCESS
       - run:
           name: Docker login
-          command: |
-            echo $HEROKU_API_KEY | docker login -u _json_key --password-stdin https://$DOCKER_REGISTRY
+          command: echo $HEROKU_API_KEY | docker login -u _json_key --password-stdin https://$DOCKER_REGISTRY
+      - run:
+          name: DEBUG # todo remove
+          command: echo $VERSION; echo $IMAGE_NAME
       - run:
           name: Build image
           command: |
