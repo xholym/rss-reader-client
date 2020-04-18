@@ -47,7 +47,7 @@ jobs:
           command: echo $HEROKU_API_KEY | docker login -u _json_key --password-stdin https://$DOCKER_REGISTRY
       - run:
           name: Docker ignore
-          run: ls
+          command: ls
       - run:
           name: Build image
           command: docker build -t $IMAGE_NAME:$VERSION .
