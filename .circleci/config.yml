@@ -22,7 +22,7 @@ jobs:
           command: npm test
   deploy:
     docker:
-      - image: circleci/node:13.13.0-slim
+      - image: circleci/node:13.3.0-stretch
         environment:
           HEROKU_APP: xholym--rss-reader
           HEROKU_PROCESS: web
