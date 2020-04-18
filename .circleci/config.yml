@@ -2,22 +2,67 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: circleci/node:8.9.1
+      - image: circleci/node:13.13.0-slim
     steps:
       - checkout
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "package.json" }}
+            - npm-cache-v1-{{ checksum "package-lock.json" }}
             # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-      - run: npm install
+            - npm-cache-v1-
+      - run:
+          name: Install Dependencies
+          command: npm ci
+      - save_cache:
+          paths:
+            - /home/circleci/.npm   # cache stored here when npm ci is used
+          key: npm-cache-v1-{{ checksum "package-lock.json" }}
       - run:
           name: Run tests
           command: npm test
+  deploy:
+    environment:
+      HEROKU_APP: "xholym--rss-reader"
+      HEROKU_PROCESS: "web"
+      DOCKER_REGISTRY: "registry.heroku.com"
+    steps:
+      - checkout
+      - setup_remote_docker
       - run:
-          name: Run production build
-          command: CI=false npm run build   # CI=false here so react-scripts does not treat warnings as errors
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+          name: Setup Heroku
+          command: bash .circleci/setup-heroku.sh # run a script to set up Heroku
+      - run:
+          name: Setup vars
+          command: |
+            VERSION=$(grep \"version\": package.json | sed -n 's/.*: "\(.*\)",.*/\1/p')
+            IMAGE_NAME=$(${DOCKER_REGISTRY}/${HEROKU_APP}/${HEROKU_PROCESS})
+      - run:
+          name: Docker login
+          command: echo ${HEROKU_KEY} | docker login -u _json_key --password-stdin https://${DOCKER_REGISTRY}
+      - run:
+          name: Build docker image
+          comand: docker build -t $IMAGE_NAME:$VERSION .
+      - run:
+          name: Tag image lastest
+          comand: docker tag $IMAGE_NAME:$VERSION $IMAGE_NAME:latest
+      - run:
+          name: Push image
+          comand: docker push $IMAGE_NAME
+      - run:
+          name: Release heroku container
+          comand: heroku container:release
+
+
+workflows:
+  version: 2
+  all:
+    jobs:
+      - build
+      - deploy
+        requires:
+          - build
+        filters:
+          branches:
+            only:
+              - master
+              - ci-cd   # TODO remove after test

@@ -1,11 +1,9 @@
 .circleci
 .idea
 /node_modules
-/public
-/src
+/build
 .git
 .gitignore
 Dockerfile
 *.md
 *.yml
-*.json
