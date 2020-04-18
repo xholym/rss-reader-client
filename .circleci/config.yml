@@ -46,9 +46,6 @@ jobs:
           name: Docker login
           command: echo $HEROKU_API_KEY | docker login -u _json_key --password-stdin https://$DOCKER_REGISTRY
       - run:
-          name: Docker ignore
-          command: ls
-      - run:
           name: Build image
           command: docker build -t $IMAGE_NAME:$VERSION .
       - run:
@@ -71,8 +68,7 @@ workflows:
           requires:
             - build
           context: heroku
-#          filters:
-#            branches:
-#              only:
-#                - master
-#                - ci-cd   # TODO remove after test
+          filters:
+            branches:
+              only:
+                - master

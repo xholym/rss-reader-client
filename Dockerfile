@@ -5,7 +5,7 @@ ENV PATH /app/node_modules/.bin:$PATH
 
 COPY package.json ./
 COPY package-lock.json ./
-RUN npm ci
+RUN npm ci --no-optional
 
 COPY . .
 RUN npm run build
