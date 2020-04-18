@@ -57,7 +57,7 @@ jobs:
           command: docker push $IMAGE_NAME
       - run:
           name: Release heroku container
-          command: heroku container:release -a $HEROKU_APP_NAME
+          command: heroku container:release web -a $HEROKU_APP_NAME
 
 
 workflows:
