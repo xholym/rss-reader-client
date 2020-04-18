@@ -38,6 +38,9 @@ jobs:
       - run:
           name: Setup variables
           command: |
+            grep \"version\": package.json | sed -n 's/.*: "\(.*\)",.*/\1/p'
+            echo ci=${CIRCLE_BUILD_NUM}
+            echo d=${DOCKER_REGISTRY},${HEROKU_APP_NAME},${HEROKU_PROCESS}
             VERSION=$(grep \"version\": package.json | sed -n 's/.*: "\(.*\)",.*/\1/p')-${CIRCLE_BUILD_NUM}
             IMAGE_NAME=${DOCKER_REGISTRY}/${HEROKU_APP_NAME}/${HEROKU_PROCESS}
       - run:
