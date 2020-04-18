@@ -36,7 +36,7 @@ jobs:
       - checkout
       - heroku/install
       - run:
-          name: Setup vars
+          name: Setup variables
           command: |
             VERSION=$(grep \"version\": package.json | sed -n 's/.*: "\(.*\)",.*/\1/p')-${CIRCLE_BUILD_NUM}
             IMAGE_NAME=${DOCKER_REGISTRY}/${HEROKU_APP_NAME}/${HEROKU_PROCESS}
@@ -46,8 +46,8 @@ jobs:
       - run:
           name: DEBUG # todo remove
           command: |
-            echo ${VERSION}
-            echo ${IMAGE_NAME}
+            echo v=${VERSION}
+            echo i=${IMAGE_NAME}
       - run:
           name: Build image
           command: |
