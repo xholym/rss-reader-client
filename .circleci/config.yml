@@ -33,11 +33,11 @@ jobs:
       - run:
           name: Setup Heroku
           command: bash .circleci/setup-heroku.sh # run a script to set up Heroku
-      - run:
-          name: Setup vars
-          command: |
-            VERSION=$(grep \"version\": package.json | sed -n 's/.*: "\(.*\)",.*/\1/p')
-            IMAGE_NAME=$(${DOCKER_REGISTRY}/${HEROKU_APP}/${HEROKU_PROCESS})
+#      - run:
+#          name: Setup vars
+#          command: |
+#            VERSION=$(grep \"version\": package.json | sed -n 's/.*: "\(.*\)",.*/\1/p')
+#            IMAGE_NAME=$(${DOCKER_REGISTRY}/${HEROKU_APP}/${HEROKU_PROCESS})
       - run:
           name: Docker login
           command: echo ${HEROKU_KEY} | docker login -u _json_key --password-stdin https://${DOCKER_REGISTRY}
