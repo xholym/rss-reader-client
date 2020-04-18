@@ -1,6 +1,6 @@
 import createFetchApi from './fetch'
 import { runReducers, safeGet, xmlEncodedToStr } from '../utils/utils'
-import createSortApi, { doSortBy } from './sort'
+import createSortApi, { doSortBy, SortType } from './sort'
 import { xml2js } from 'xml-js'
 
 export const list = createFetchApi('article', 'list', { list: null })
@@ -36,7 +36,7 @@ const rssToArticles = data => {
                 description: safeGet(it.description, '_text', '_cdata'),
                 pubDate: new Date(safeGet(it.pubDate, '_text', '_cdata')),
                 enclosure,
-                link: safeGet(it.link, 0)
+                link: safeGet(it.link, '_text', '_cdata')
             }
         })
 }
@@ -54,7 +54,7 @@ const reduceOther = (state, action) => {
 
 function reduce(state = { ...list.state, detail: null, ...sort.state }, action) {
     return runReducers([
-        list.reduce(data => ({ list: doSortBy(rssToArticles(data), state.order) })),
+        list.reduce(data => ({ list: doSortBy(rssToArticles(data), { target: 'pubDate', type: SortType.des}) })),
         sort.reduce,
         reduceOther
     ])(state, action)

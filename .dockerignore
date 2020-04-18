@@ -1,0 +1,9 @@
+.circleci
+.idea
+/node_modules
+/build
+.git
+.gitignore
+Dockerfile
+*.md
+*.yml

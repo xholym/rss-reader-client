@@ -1,0 +1,74 @@
+version: 2.1
+
+orbs:
+  heroku: circleci/heroku@1.0.1
+
+jobs:
+  build:
+    docker:
+      - image: circleci/node:13.3.0-stretch
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - npm-cache-v1-{{ checksum "package-lock.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - npm-cache-v1-
+      - run:
+          name: Install Dependencies
+          command: npm ci
+      - save_cache:
+          paths:
+            - /home/circleci/.npm   # cache stored here when npm ci is used
+          key: npm-cache-v1-{{ checksum "package-lock.json" }}
+      - run:
+          name: Run tests
+          command: npm test
+  deploy:
+    docker:
+      - image: circleci/node:13.3.0-stretch
+        environment:
+          HEROKU_APP_NAME: xholym--rss-reader
+          HEROKU_PROCESS: web
+          DOCKER_REGISTRY: registry.heroku.com
+    steps:
+      - setup_remote_docker
+      - checkout
+      - heroku/install
+      - run:
+          name: Setup variables
+          command: |
+            VERSION=$(grep \"version\": package.json | sed -n 's/.*: "\(.*\)",.*/\1/p')-$CIRCLE_BUILD_NUM
+            IMAGE_NAME=$DOCKER_REGISTRY/$HEROKU_APP_NAME/$HEROKU_PROCESS
+            echo "export VERSION=$VERSION" >> $BASH_ENV
+            echo "export IMAGE_NAME=$IMAGE_NAME" >> $BASH_ENV
+      - run:
+          name: Docker login
+          command: echo $HEROKU_API_KEY | docker login -u _json_key --password-stdin https://$DOCKER_REGISTRY
+      - run:
+          name: Build image
+          command: docker build -t $IMAGE_NAME:$VERSION .
+      - run:
+          name: Tag image lastest
+          command: docker tag $IMAGE_NAME:$VERSION $IMAGE_NAME:latest
+      - run:
+          name: Push image
+          command: docker push $IMAGE_NAME
+      - run:
+          name: Release heroku container
+          command: heroku container:release web -a $HEROKU_APP_NAME
+
+
+workflows:
+  version: 2
+  all:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          context: heroku
+          filters:
+            branches:
+              only:
+                - master
