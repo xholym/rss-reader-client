@@ -47,18 +47,18 @@ jobs:
           name: Docker login
           command: |
             echo ${HEROKU_API_KEY} | docker login -u _json_key --password-stdin https://${DOCKER_REGISTRY}
-      - run:
-          name: Build docker image
-          comand: docker build -t $IMAGE_NAME:$VERSION .
-      - run:
-          name: Tag image lastest
-          comand: docker tag $IMAGE_NAME:$VERSION $IMAGE_NAME:latest
-      - run:
-          name: Push image
-          comand: docker push $IMAGE_NAME
-      - run:
-          name: Release heroku container
-          comand: heroku container:release
+#      - run:
+#          name: Build docker image
+#          comand: docker build -t $IMAGE_NAME:$VERSION .
+#      - run:
+#          name: Tag image lastest
+#          comand: docker tag $IMAGE_NAME:$VERSION $IMAGE_NAME:latest
+#      - run:
+#          name: Push image
+#          comand: docker push $IMAGE_NAME
+#      - run:
+#          name: Release heroku container
+#          comand: heroku container:release
 
 
 workflows:
