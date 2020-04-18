@@ -36,9 +36,6 @@ jobs:
       - checkout
       - heroku/install
       - run:
-          name: Setup Heroku
-          command: heroku login
-      - run:
           name: Setup vars
           command: |
             VERSION=$(grep \"version\": package.json | sed -n 's/.*: "\(.*\)",.*/\1/p')
@@ -47,9 +44,9 @@ jobs:
           name: Docker login
           command: |
             echo ${HEROKU_API_KEY} | docker login -u _json_key --password-stdin https://${DOCKER_REGISTRY}
-#      - run:
-#          name: Build docker image
-#          comand: docker build -t $IMAGE_NAME:$VERSION .
+      - run:
+          name: Build docker image
+          comand: docker build -t $IMAGE_NAME:$VERSION .
 #      - run:
 #          name: Tag image lastest
 #          comand: docker tag $IMAGE_NAME:$VERSION $IMAGE_NAME:latest
