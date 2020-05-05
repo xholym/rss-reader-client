@@ -7,13 +7,13 @@ const format = (e, op, type) => {
     return `${f(e)}${op}_${type}`
 }
 
-const provideServerUrl = () => 'http://webp.itprof.sk:8000/fetchurl'
+const provideServerUrl = () => 'https://cors-anywhere.herokuapp.com/'
 
 function request(url) {
     return dispatch => {
         dispatch(this.pending())
 
-        return http.post(provideServerUrl(), {url})
+        return http.get(provideServerUrl() + url)
             .then(({data}) => {
                 dispatch(this.done(data))
             })
