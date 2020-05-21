@@ -3,6 +3,9 @@ https://github.com/xholym/rss-reader-client \
 projekt pre predmet Webové publikovanie 
 
 ## CI/CD
+nasadene na URL:
+- https://xholym--rss-reader.herokuapp.com
+
 použil som tieto nástroje:
 - CircleCI
 - Docker
